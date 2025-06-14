@@ -1,0 +1,98 @@
+# Backend-only docker-compose for testing
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: meeting_whisperer_db
+    environment:
+      POSTGRES_USER: meeting_user
+      POSTGRES_PASSWORD: meeting_pass
+      POSTGRES_DB: meeting_whisperer
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - meeting_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U meeting_user -d meeting_whisperer"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Celery
+  redis:
+    image: redis:7-alpine
+    container_name: meeting_whisperer_redis
+    ports:
+      - "6380:6379"
+    networks:
+      - meeting_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    container_name: meeting_whisperer_backend
+    environment:
+      - DATABASE_URL=postgresql://meeting_user:meeting_pass@postgres:5432/meeting_whisperer
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-dummy-key-for-testing}
+      - SECRET_KEY=${SECRET_KEY:-your-super-secret-jwt-key-change-this-in-production}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - meeting_network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Celery Worker
+  celery_worker:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    container_name: meeting_whisperer_worker
+    environment:
+      - DATABASE_URL=postgresql://meeting_user:meeting_pass@postgres:5432/meeting_whisperer
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-dummy-key-for-testing}
+      - SECRET_KEY=${SECRET_KEY:-your-super-secret-jwt-key-change-this-in-production}
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - meeting_network
+    command: celery -A app.workers.celery_app worker --loglevel=info
+
+volumes:
+  postgres_data:
+
+networks:
+  meeting_network:
+    driver: bridge
+
