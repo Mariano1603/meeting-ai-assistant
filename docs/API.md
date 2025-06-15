@@ -1,6 +1,6 @@
-# Meeting Whisperer API Documentation
+# Meeting AI Assistant API Documentation
 
-The Meeting Whisperer API provides endpoints for meeting transcription, summarization, and task extraction.
+The Meeting AI Assistant API provides endpoints for meeting transcription, summarization, and task extraction. This API is now integrated with a complete Next.js frontend application providing a full-stack solution.
 
 ## Base URL
 

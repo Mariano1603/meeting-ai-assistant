@@ -1,6 +1,6 @@
 # Setup Guide
 
-This guide will help you set up the Meeting Whisperer project for development.
+This guide will help you set up the Meeting AI Assistant project for development. This includes both the backend API and the complete Next.js frontend application.
 
 ## Prerequisites
 
@@ -30,9 +30,9 @@ This guide will help you set up the Meeting Whisperer project for development.
    # Edit .env with your configuration
    ```
 
-4. **Start the application**
+4. **Start the full-stack application**
    ```bash
-   npm run docker:dev
+   docker-compose up --build -d
    ```
 
 ## Manual Setup
@@ -100,6 +100,35 @@ After setup, the following services will be available:
 - **API Documentation**: http://localhost:8000/docs
 - **PostgreSQL**: localhost:5432
 - **Redis**: localhost:6379
+
+## Frontend Features (✅ Complete)
+
+The frontend application includes:
+
+### Authentication System
+- User registration and login
+- JWT token management
+- Protected routes and authentication guards
+- Persistent login sessions
+
+### Dashboard
+- Meeting overview and statistics
+- Recent meetings display
+- Quick access to upload functionality
+- User profile management
+
+### Meeting Management
+- File upload with drag-and-drop support
+- Meeting list with search and filtering
+- Individual meeting detail pages
+- Real-time processing status updates
+
+### User Interface
+- Modern, responsive design with Tailwind CSS
+- Dark/light theme support
+- Accessible UI components using Shadcn/ui
+- Mobile-friendly responsive layout
+- Loading states and error handling
 
 ## Development Commands
 
