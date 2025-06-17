@@ -78,7 +78,8 @@ Our platform is built with modern, scalable technologies designed for enterprise
 ### One-Command Setup
 ```bash
 # Clone and start the entire stack
-git clone https://github.com/Sonupandit9693/meeting-ai-assistant.git
+git clone https://github.com/NarenderSD/meeting-ai-assistant.git
+# git clone https://github.com/Sonupandit9693/meeting-ai-assistant.git
 cd meeting-ai-assistant
 cp .env.example .env
 # Add your OpenAI API key to .env
