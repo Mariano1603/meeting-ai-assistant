@@ -50,8 +50,10 @@ export default function MeetingDetailsPage() {
     const fetchMeeting = async () => {
       try {
         const response = await api.get(`/meetings/${meetingId}`)
+        console.log("SUCESS FETCH TO MEETING", response.data)
         setMeeting(response.data)
       } catch (err: any) {
+        console.log("FAILED TO FETCH MEETING", err.response)
         setError(err.response?.data?.detail || "Failed to load meeting")
       } finally {
         setIsLoading(false)
@@ -171,7 +173,7 @@ export default function MeetingDetailsPage() {
               </div>
               <div className="flex items-center space-x-1">
                 <CheckSquare className="h-4 w-4" />
-                <span>{meeting.tasks.length} tasks</span>
+                <span>{meeting?.tasks?.length} tasks</span>
               </div>
             </div>
           </div>
@@ -247,9 +249,9 @@ export default function MeetingDetailsPage() {
                 )}
               </TabsContent>
 
-              <TabsContent value="tasks" className="space-y-4">
+              {/* <TabsContent value="tasks" className="space-y-4">
                 <TaskList tasks={meeting.tasks} onTaskUpdate={handleTaskUpdate} />
-              </TabsContent>
+              </TabsContent> */}
             </Tabs>
           </div>
 
@@ -312,19 +314,33 @@ export default function MeetingDetailsPage() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Total Tasks</span>
-                  <span className="font-medium">{meeting.tasks.length}</span>
+                  <span className="font-medium">
+                    {meeting?.tasks?.length}
+
+                    </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Completed</span>
-                  <span className="font-medium">{meeting.tasks.filter((t) => t.status === "completed").length}</span>
+                  <span className="font-medium">
+                    
+                   {/* {meeting.tasks.filter((t) => t.status === "completed").length}*/}
+
+                    </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">In Progress</span>
-                  <span className="font-medium">{meeting.tasks.filter((t) => t.status === "in_progress").length}</span>
+                  <span className="font-medium">
+                    
+                   {/*  {meeting.tasks.filter((t) => t.status === "in_progress").length} */}
+
+                    </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">Pending</span>
-                  <span className="font-medium">{meeting.tasks.filter((t) => t.status === "pending").length}</span>
+                  <span className="font-medium">
+                    {/* {meeting.tasks.filter((t) => t.status === "pending").length} */}
+                    abhi to pending bhi 0 hai
+                    </span>
                 </div>
               </CardContent>
             </Card>

@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Home, FileText, Upload, CheckSquare, Settings, Users, BarChart3, Mic, LogOut, User, Bell } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 const navigation = [
   {
@@ -61,25 +62,33 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user, logout } = useAuth()
   const pathname = usePathname()
+  const router = useRouter()
 
   const handleLogout = async () => {
-    await logout()
+    try{
+      await logout()
+      router.push("auth/login")
+    }catch{
+      console.log("LOGOUT OCCURED ERROR:")
+    }
   }
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <Sidebar>
-          <SidebarHeader>
-            <div className="flex items-center space-x-2 px-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Mic className="w-5 h-5 text-white" />
+          <Link href={"/"}>
+            <SidebarHeader>
+              <div className="flex items-center space-x-2 px-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Mic className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Meeting Whisperer
+                </span>
               </div>
-              <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Meeting Whisperer
-              </span>
-            </div>
-          </SidebarHeader>
+            </SidebarHeader>
+          </Link>
 
           <SidebarContent>
             {navigation.map((section) => (

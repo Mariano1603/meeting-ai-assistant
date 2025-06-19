@@ -34,17 +34,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem("access_token")
-      if (token) {
-        try {
+      try {
+        const token = localStorage.getItem("access_token")
+        if (token) {
           const userData = await authApi.getCurrentUser()
           setUser(userData)
-        } catch (error) {
-          localStorage.removeItem("access_token")
-          localStorage.removeItem("refresh_token")
         }
+      } catch (error) {
+        await logout() // fallback logout if token is bad
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
 
     initAuth()
@@ -52,10 +52,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+
       const response = await authApi.login(email, password)
 
       localStorage.setItem("access_token", response.access_token)
-      // Only store refresh_token if it exists in the response
       if (response.refresh_token) {
         localStorage.setItem("refresh_token", response.refresh_token)
       }
@@ -63,7 +65,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
-      throw error
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+      throw error // important so LoginPage.tsx can show toast
     }
   }
 
@@ -75,9 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }) => {
     try {
       await authApi.register(userData)
-      // Log in the user immediately after registration
       await login(userData.email, userData.password)
-      
     } catch (error) {
       throw error
     }
@@ -109,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const value = {
+  const value: AuthContextType = {
     user,
     isLoading,
     login,
