@@ -29,7 +29,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Home, FileText, Upload, CheckSquare, Settings, Users, BarChart3, Mic, LogOut, User, Bell } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 const navigation = [
   {
@@ -59,8 +60,19 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { user, logout } = useAuth()
+  const { user, logout, isLoading } = useAuth()
   const pathname = usePathname()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.replace("/auth/login")
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading || !user) {
+    return null
+  }
 
   const handleLogout = async () => {
     await logout()

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -17,15 +17,24 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingForm, setIsLoadingForm] = useState(false)
   const [error, setError] = useState("")
 
-  const { login } = useAuth()
+  const { login, user, isLoading } = useAuth()
   const router = useRouter()
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.replace("/dashboard")
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setIsLoadingForm(true)
     setError("")
 
     try {
@@ -34,7 +43,7 @@ export default function LoginPage() {
     } catch (err) {
       setError("Invalid email or password")
     } finally {
-      setIsLoading(false)
+      setIsLoadingForm(false)
     }
   }
 
@@ -102,8 +111,8 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="w-full" disabled={isLoadingForm}>
+              {isLoadingForm && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign In
             </Button>
           </form>

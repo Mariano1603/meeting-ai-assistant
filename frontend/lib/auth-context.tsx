@@ -53,13 +53,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       const response = await authApi.login(email, password)
-
       localStorage.setItem("access_token", response.access_token)
-      // Only store refresh_token if it exists in the response
       if (response.refresh_token) {
         localStorage.setItem("refresh_token", response.refresh_token)
       }
-
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
@@ -75,9 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }) => {
     try {
       await authApi.register(userData)
-      // Log in the user immediately after registration
       await login(userData.email, userData.password)
-      
     } catch (error) {
       throw error
     }
@@ -94,11 +89,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!refreshToken) {
       throw new Error("No refresh token available")
     }
-
     try {
       const response = await authApi.refreshToken(refreshToken)
       localStorage.setItem("access_token", response.access_token)
-
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
