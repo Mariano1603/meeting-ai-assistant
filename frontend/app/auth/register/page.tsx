@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -26,13 +26,21 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingForm, setIsLoadingForm] = useState(false)
   const [error, setError] = useState("")
 
-  // useAuthRedirect()
+  const { register, user, isLoading } = useAuth()
 
-  const { register } = useAuth()
   const router = useRouter()
+
+  // Redirect to dashboard if already logged in
+  useEffect(() => {
+    if (!isLoading && user) {
+      router.replace("/dashboard")
+    }
+  }, [user, isLoading, router])
+
+  if (isLoading) return null
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -43,18 +51,18 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setIsLoadingForm(true)
     setError("")
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
-      setIsLoading(false)
+      setIsLoadingForm(false)
       return
     }
 
     if (!acceptTerms) {
       setError("Please accept the terms and conditions")
-      setIsLoading(false)
+      setIsLoadingForm(false)
       return
     }
 
@@ -69,7 +77,7 @@ export default function RegisterPage() {
     } catch (err: any) {
       setError(err.message || "Registration failed")
     } finally {
-      setIsLoading(false)
+      setIsLoadingForm(false)
     }
   }
 
@@ -200,8 +208,8 @@ export default function RegisterPage() {
               </Label>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button type="submit" className="w-full" disabled={isLoadingForm}>
+              {isLoadingForm && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
             </Button>
           </form>

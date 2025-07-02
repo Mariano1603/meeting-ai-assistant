@@ -1,4 +1,8 @@
 "use client"
+
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -7,8 +11,19 @@ import { Mic, FileText, CheckSquare, Zap, Shield, Users, ArrowRight, Play, Star 
 import { useAuth } from "@/lib/auth-context"
 
 export default function LandingPage() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace("/dashboard")
+    }
+  }, [user, loading, router])
+
+  if (loading) return null
 
   const {user, isLoading} = useAuth()
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">

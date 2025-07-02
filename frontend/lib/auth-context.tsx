@@ -56,12 +56,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem("refresh_token")
 
       const response = await authApi.login(email, password)
-
       localStorage.setItem("access_token", response.access_token)
       if (response.refresh_token) {
         localStorage.setItem("refresh_token", response.refresh_token)
       }
-
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
@@ -96,11 +94,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!refreshToken) {
       throw new Error("No refresh token available")
     }
-
     try {
       const response = await authApi.refreshToken(refreshToken)
       localStorage.setItem("access_token", response.access_token)
-
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
