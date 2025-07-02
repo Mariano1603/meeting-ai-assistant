@@ -9,6 +9,7 @@ import { FileText, Upload, CheckSquare, TrendingUp, Calendar, Users, Mic } from 
 import Link from "next/link"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { meetingApi, taskApi } from "@/lib/api"
+import { useAuthRedirect } from "@/lib/useAuthRedirect"
 
 interface DashboardStats {
   total_meetings: number
@@ -26,6 +27,8 @@ interface DashboardStats {
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+
+  // useAuthRedirect()
 
   useEffect(() => {
     const fetchStats = async () => {

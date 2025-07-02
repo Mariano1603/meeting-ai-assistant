@@ -1,13 +1,14 @@
 "use client"
 
+
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Mic, FileText, CheckSquare, Zap, Shield, Users, ArrowRight, Play, Star } from "lucide-react"
+import { useAuth } from "@/lib/auth-context"
 
 export default function LandingPage() {
   const { user, loading } = useAuth()
@@ -20,6 +21,9 @@ export default function LandingPage() {
   }, [user, loading, router])
 
   if (loading) return null
+
+  const {user, isLoading} = useAuth()
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -34,14 +38,25 @@ export default function LandingPage() {
               Meeting Whisperer
             </span>
           </div>
-          <div className="flex items-center space-x-4">
-            <Link href="/auth/login">
-              <Button variant="ghost">Sign In</Button>
-            </Link>
-            <Link href="/auth/register">
-              <Button>Get Started</Button>
-            </Link>
-          </div>
+
+          {!isLoading && (
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <Link href="/dashboard">
+                  <Button>Go to Dashboard</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/auth/login">
+                    <Button variant="ghost">Sign In</Button>
+                  </Link>
+                  <Link href="/auth/register">
+                    <Button>Get Started</Button>
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -52,7 +67,7 @@ export default function LandingPage() {
             <Zap className="w-4 h-4 mr-1" />
             AI-Powered Meeting Assistant
           </Badge>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-bold mb-10 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
             Transform Your Meetings with AI
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">

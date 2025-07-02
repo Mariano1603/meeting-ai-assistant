@@ -34,17 +34,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const initAuth = async () => {
-      const token = localStorage.getItem("access_token")
-      if (token) {
-        try {
+      try {
+        const token = localStorage.getItem("access_token")
+        if (token) {
           const userData = await authApi.getCurrentUser()
           setUser(userData)
-        } catch (error) {
-          localStorage.removeItem("access_token")
-          localStorage.removeItem("refresh_token")
         }
+      } catch (error) {
+        await logout() // fallback logout if token is bad
+      } finally {
+        setIsLoading(false)
       }
-      setIsLoading(false)
     }
 
     initAuth()
@@ -52,6 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+
       const response = await authApi.login(email, password)
       localStorage.setItem("access_token", response.access_token)
       if (response.refresh_token) {
@@ -60,7 +63,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await authApi.getCurrentUser()
       setUser(userData)
     } catch (error) {
-      throw error
+      localStorage.removeItem("access_token")
+      localStorage.removeItem("refresh_token")
+      throw error // important so LoginPage.tsx can show toast
     }
   }
 
@@ -102,7 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const value = {
+  const value: AuthContextType = {
     user,
     isLoading,
     login,

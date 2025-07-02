@@ -12,6 +12,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Mic, Eye, EyeOff, Loader2 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { useToast } from "@/components/ui/use-toast"
+import { useAuthRedirect } from "@/lib/useAuthRedirect"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -21,7 +23,10 @@ export default function LoginPage() {
   const [error, setError] = useState("")
 
   const { login, user, isLoading } = useAuth()
+  useAuthRedirect()
+
   const router = useRouter()
+  const { toast } = useToast()
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
@@ -40,8 +45,25 @@ export default function LoginPage() {
     try {
       await login(email, password)
       router.push("/dashboard")
-    } catch (err) {
-      setError("Invalid email or password")
+    } catch (err: any) {
+      console.log("Login ERROR", err)
+
+      toast({
+        title: "Login Failed",
+        description:
+          err.response?.data?.detail ||
+          err.response?.data?.message ||
+          "Invalid credentials or server error",
+        variant: "destructive",
+      })
+
+      if (err.response?.status === 401) {
+        setError("Invalid email or password")
+      } else if (err.response?.data?.detail) {
+        setError(err.response.data.detail)
+      } else {
+        setError("Login failed. Please try again.")
+      }
     } finally {
       setIsLoadingForm(false)
     }

@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Mic, Eye, EyeOff, Loader2 } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { useAuthRedirect } from "@/lib/useAuthRedirect"
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("")
 
   const { register, user, isLoading } = useAuth()
+
   const router = useRouter()
 
   // Redirect to dashboard if already logged in

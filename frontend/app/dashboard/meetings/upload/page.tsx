@@ -71,11 +71,14 @@ export default function UploadMeetingPage() {
 
       setSuccess(true)
 
+      console.log("Sucess fully upload file", response.data)
+
       // Redirect to meeting details after a short delay
       setTimeout(() => {
-        router.push(`/dashboard/meetings/${response.data.id}`)
+        router.push(`/dashboard/meetings/${response.data.meeting_id}`)
       }, 2000)
     } catch (err: any) {
+      console.log("Failed to Upload meeting response", err.response)
       setError(err.response?.data?.detail || "Upload failed. Please try again.")
     } finally {
       setIsUploading(false)
